@@ -213,6 +213,13 @@
       <label for="appraisal">Estimated Appraisal Fee</label>
       <input id="appraisal" type="number" value="600" min="0" />
 
+      <label for="homeWarranty">Estimated Home Warranty</label>
+      <input id="homeWarranty" type="number" value="700" min="0" />
+      
+      <label for="survey">Estimated Survey</label>
+      <input id="survey" type="number" value="600" min="0" />
+      <div class="hint">Survey cost may vary based on lot size, property type, lender requirements, and survey provider.</div>
+      
       <label for="pmi">Monthly PMI / MIP Estimate</label>
       <input id="pmi" type="number" value="0" min="0" />
       <div class="hint">Ask your lender for a more accurate PMI/MIP estimate based on loan type, credit, and down payment.</div>
@@ -230,7 +237,10 @@
         <div class="result-row"><span>Down Payment</span><strong id="downPayment">$0</strong></div>
         <div class="result-row"><span>Estimated Loan Amount</span><strong id="loanAmount">$0</strong></div>
         <div class="result-row"><span>Estimated Closing Costs</span><strong id="closingCosts">$0</strong></div>
-        <div class="result-row"><span>Less Seller Credit</span><strong id="sellerCreditOut">$0</strong></div>
+        <div class="result-row"><span>Estimated Inspections</span><strong id="inspectionOut">$0</strong></div>
+        <div class="result-row"><span>Estimated Appraisal</span><strong id="appraisalOut">$0</strong></div>
+        <div class="result-row"><span>Estimated Home Warranty</span><strong id="homeWarrantyOut">$0</strong></div>
+        <div class="result-row"><span>Estimated Survey</span><strong id="surveyOut">$0</strong></div>        <div class="result-row"><span>Less Seller Credit</span><strong id="sellerCreditOut">$0</strong></div>
         <div class="result-row"><span>Less EMD Already Paid</span><strong id="emdOut">$0</strong></div>
         <div class="total">
           <div class="result-row"><span>Estimated Cash Needed at Closing</span><strong id="cashToClose">$0</strong></div>
@@ -313,8 +323,9 @@ function calculate() {
   const emd = Number(document.getElementById("emd").value) || 0;
   const inspection = Number(document.getElementById("inspection").value) || 0;
   const appraisal = Number(document.getElementById("appraisal").value) || 0;
+  const homeWarranty = Number(document.getElementById("homeWarranty").value) || 0;
+  const survey = Number(document.getElementById("survey").value) || 0;  
   const pmi = Number(document.getElementById("pmi").value) || 0;
-
   const downPayment = price * (downPercent / 100);
   const loanAmount = Math.max(price - downPayment, 0);
   const closingCosts = price * (closingPercent / 100);
@@ -338,12 +349,17 @@ function calculate() {
   const monthlyTotal =
     principalInterest + monthlyTaxes + monthlyInsurance + hoa + monthlyCdd + pmi;
 
-  const cashToClose = Math.max(downPayment + closingCosts - sellerCredit - emd, 0);
-  const preClosing = inspection + appraisal;
+  const outOfPocketCosts = inspection + appraisal + homeWarranty + survey;
+  const cashToClose = Math.max(downPayment + closingCosts + outOfPocketCosts - sellerCredit - emd, 0);
+  const preClosing = outOfPocketCosts;
 
   document.getElementById("downPayment").textContent = money(downPayment);
   document.getElementById("loanAmount").textContent = money(loanAmount);
   document.getElementById("closingCosts").textContent = money(closingCosts);
+  document.getElementById("inspectionOut").textContent = money(inspection);
+  document.getElementById("appraisalOut").textContent = money(appraisal);
+  document.getElementById("homeWarrantyOut").textContent = money(homeWarranty);
+  document.getElementById("surveyOut").textContent = money(survey);  
   document.getElementById("sellerCreditOut").textContent = "-" + money(sellerCredit);
   document.getElementById("emdOut").textContent = "-" + money(emd);
   document.getElementById("cashToClose").textContent = money(cashToClose);
@@ -373,6 +389,8 @@ function resetCalculator() {
   document.getElementById("emd").value = 0;
   document.getElementById("inspection").value = 600;
   document.getElementById("appraisal").value = 600;
+  document.getElementById("homeWarranty").value = 700;
+  document.getElementById("survey").value = 600;
   document.getElementById("pmi").value = 0;
 
   calculate();
