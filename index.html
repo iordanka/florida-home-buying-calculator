@@ -1,315 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Florida Home Buying Cost Calculator</title>
-
 <style>
+  :root {
+    --purple: #4b2e83;
+    --purple-dark: #321b5f;
+    --gold: #c9a227;
+    --light: #f7f5fb;
+    --border: #ddd7ea;
+    --text: #222;
+  }
 
-body{
-font-family:Arial,Helvetica,sans-serif;
-background:#f5f5f5;
-margin:0;
-padding:20px;
-}
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background: #ffffff;
+    color: var(--text);
+  }
 
-.calculator{
-max-width:900px;
-margin:auto;
-background:#ffffff;
-padding:25px;
-border-radius:12px;
-box-shadow:0 2px 10px rgba(0,0,0,.15);
-}
+  .calculator-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 18px;
+  }
 
-h2{
-text-align:center;
-color:#5b2c90;
-margin-bottom:20px;
-}
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
 
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
-}
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(0,0,0,.04);
+  }
 
-@media(max-width:768px){
-.grid{
-grid-template-columns:1fr;
-}
-}
+  .card h2 {
+    color: var(--purple);
+    margin: 0 0 16px;
+    font-size: 22px;
+  }
 
-label{
-font-weight:bold;
-display:block;
-margin-bottom:5px;
-}
+  label {
+    display: block;
+    font-weight: 700;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
 
-input{
-width:100%;
-padding:10px;
-border:1px solid #ccc;
-border-radius:5px;
-box-sizing:border-box;
-}
+  input, select, textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #cfc7df;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 15px;
+    background: #fff;
+  }
 
-.buttons{
-text-align:center;
-margin-top:20px;
-}
+  textarea {
+    min-height: 80px;
+  }
 
-button{
-background:#5b2c90;
-color:white;
-border:none;
-padding:12px 20px;
-margin:5px;
-border-radius:5px;
-cursor:pointer;
-font-size:16px;
-}
+  .hint {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+    line-height: 1.35;
+  }
 
-button:hover{
-opacity:.9;
-}
+  .results {
+    background: var(--light);
+    border: 2px solid var(--purple);
+  }
 
-.results{
-margin-top:25px;
-background:#f8f4fc;
-padding:20px;
-border-radius:10px;
-}
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid #e6e0f1;
+    padding: 10px 0;
+    font-size: 15px;
+  }
 
-.results h3{
-margin-top:0;
-color:#5b2c90;
-}
+  .result-row:last-child {
+    border-bottom: none;
+  }
 
-.result-row{
-display:flex;
-justify-content:space-between;
-padding:8px 0;
-border-bottom:1px solid #ddd;
-}
+  .result-row strong {
+    color: var(--purple-dark);
+  }
 
-.disclaimer{
-margin-top:20px;
-font-size:12px;
-color:#666;
-line-height:1.5;
-}
+  .total {
+    background: #fff;
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 14px;
+  }
 
+  .total .result-row {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .btn {
+    display: inline-block;
+    background: var(--purple);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 13px 22px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 14px;
+  }
+
+  .btn:hover {
+    background: var(--purple-dark);
+  }
+
+  .lead-box {
+    margin-top: 22px;
+    padding: 24px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #ffffff, #f4effb);
+    border: 1px solid var(--border);
+  }
+
+  .lead-box h2 {
+    margin-top: 0;
+    color: var(--purple);
+  }
+
+  .disclaimer {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.45;
+    margin-top: 18px;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+  }
+
+  .contact {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 14px;
+  }
+
+  @media (max-width: 800px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+      font-size: 25px;
+    }
+  }
 </style>
 </head>
-
 <body>
+<div class="calculator-wrap">
 
-<div class="calculator">
+  <div class="grid">
+    <section class="card">
+      <h2>Property & Loan Details</h2>
 
-<h2>Florida Home Buying Cost Calculator</h2>
+      <label for="price">Purchase Price</label>
+      <input id="price" type="number" value="400000" min="0" />
 
-<div class="grid">
+      <label for="downPercent">Down Payment %</label>
+      <input id="downPercent" type="number" value="5" step="0.1" min="0" />
 
-<div>
-<label>Purchase Price ($)</label>
-<input type="number" id="price" value="400000">
-</div>
+      <label for="rate">Interest Rate %</label>
+      <input id="rate" type="number" value="6.75" step="0.01" min="0" />
 
-<div>
-<label>Down Payment (%)</label>
-<input type="number" id="downPercent" value="20">
-</div>
+      <label for="term">Loan Term</label>
+      <select id="term">
+        <option value="30" selected>30 Years</option>
+        <option value="20">20 Years</option>
+        <option value="15">15 Years</option>
+      </select>
 
-<div>
-<label>Interest Rate (%)</label>
-<input type="number" id="interestRate" value="6.5">
-</div>
+      <label for="taxes">Annual Property Taxes</label>
+      <input id="taxes" type="number" value="5000" min="0" />
+      <div class="hint">Use the current or prior year tax amount when available. Actual taxes may change after purchase.</div>
 
-<div>
-<label>Loan Term (Years)</label>
-<input type="number" id="loanTerm" value="30">
-</div>
+      <label for="insurance">Annual Homeowners Insurance</label>
+      <input id="insurance" type="number" value="3000" min="0" />
 
-<div>
-<label>Annual Property Taxes ($)</label>
-<input type="number" id="taxes" value="4000">
-</div>
+      <label for="hoa">Monthly HOA / Condo Fee</label>
+      <input id="hoa" type="number" value="0" min="0" />
 
-<div>
-<label>Annual Insurance ($)</label>
-<input type="number" id="insurance" value="2500">
-</div>
+      <label for="cdd">Annual CDD Amount</label>
+      <input id="cdd" type="number" value="0" min="0" />
+      <div class="hint"><strong>CDD disclaimer:</strong> In some communities, CDD assessments may already be included in the property tax bill. Do not add the CDD here if it is already included in the annual property tax amount, or it may be counted twice.</div>
+    </section>
 
-<div>
-<label>Monthly HOA ($)</label>
-<input type="number" id="hoa" value="0">
-</div>
+    <section class="card">
+      <h2>Closing & Prepaid Estimate</h2>
 
-<div>
-<label>Annual CDD ($)</label>
-<input type="number" id="cdd" value="0">
-</div>
+      <label for="closingPercent">Estimated Closing Cost %</label>
+      <input id="closingPercent" type="number" value="3" step="0.1" min="0" />
+      <div class="hint">A rough estimate only. Actual title, lender, county, HOA, and prepaid costs vary.</div>
 
-<div>
-<label>Estimated Closing Costs (%)</label>
-<input type="number" id="closingCosts" value="3">
-</div>
+      <label for="sellerCredit">Seller Credit / Concession</label>
+      <input id="sellerCredit" type="number" value="0" min="0" />
 
-</div>
+      <label for="emd">Earnest Money Deposit Already Paid</label>
+      <input id="emd" type="number" value="0" min="0" />
 
-<div class="buttons">
-<button onclick="calculate()">Calculate</button>
-<button onclick="resetCalculator()">Reset</button>
-</div>
+      <label for="inspection">Estimated Inspection Costs</label>
+      <input id="inspection" type="number" value="600" min="0" />
 
-<div class="results">
+      <label for="appraisal">Estimated Appraisal Fee</label>
+      <input id="appraisal" type="number" value="600" min="0" />
 
-<h3>Estimated Results</h3>
+      <label for="pmi">Monthly PMI / MIP Estimate</label>
+      <input id="pmi" type="number" value="0" min="0" />
+      <div class="hint">Ask your lender for a more accurate PMI/MIP estimate based on loan type, credit, and down payment.</div>
 
-<div class="result-row">
-<span>Down Payment</span>
-<span id="downPaymentResult">$0</span>
-</div>
+      <button class="btn" onclick="calculate()">Update Estimate</button>
+    </section>
+  </div>
 
-<div class="result-row">
-<span>Loan Amount</span>
-<span id="loanAmountResult">$0</span>
-</div>
+  <section class="card results" style="margin-top:18px;">
+    <h2>Estimated Results</h2>
 
-<div class="result-row">
-<span>Estimated Closing Costs</span>
-<span id="closingCostResult">$0</span>
-</div>
+    <div class="grid">
+      <div>
+        <div class="result-row"><span>Down Payment</span><strong id="downPayment">$0</strong></div>
+        <div class="result-row"><span>Estimated Loan Amount</span><strong id="loanAmount">$0</strong></div>
+        <div class="result-row"><span>Estimated Closing Costs</span><strong id="closingCosts">$0</strong></div>
+        <div class="result-row"><span>Less Seller Credit</span><strong id="sellerCreditOut">$0</strong></div>
+        <div class="result-row"><span>Less EMD Already Paid</span><strong id="emdOut">$0</strong></div>
+        <div class="total">
+          <div class="result-row"><span>Estimated Cash Needed at Closing</span><strong id="cashToClose">$0</strong></div>
+        </div>
+      </div>
 
-<div class="result-row">
-<span>Total Cash Needed</span>
-<span id="cashNeededResult">$0</span>
-</div>
+      <div>
+        <div class="result-row"><span>Principal & Interest</span><strong id="pi">$0</strong></div>
+        <div class="result-row"><span>Monthly Property Taxes</span><strong id="monthlyTaxes">$0</strong></div>
+        <div class="result-row"><span>Monthly Insurance</span><strong id="monthlyInsurance">$0</strong></div>
+        <div class="result-row"><span>Monthly HOA / Condo Fee</span><strong id="monthlyHoa">$0</strong></div>
+        <div class="result-row"><span>Monthly CDD</span><strong id="monthlyCdd">$0</strong></div>
+        <div class="result-row"><span>Monthly PMI / MIP</span><strong id="monthlyPmi">$0</strong></div>
+        <div class="total">
+          <div class="result-row"><span>Estimated Monthly Payment</span><strong id="monthlyTotal">$0</strong></div>
+        </div>
+      </div>
+    </div>
 
-<div class="result-row">
-<span>Monthly Principal & Interest</span>
-<span id="piResult">$0</span>
-</div>
-
-<div class="result-row">
-<span>Monthly Taxes</span>
-<span id="taxResult">$0</span>
-</div>
-
-<div class="result-row">
-<span>Monthly Insurance</span>
-<span id="insuranceResult">$0</span>
-</div>
-
-<div class="result-row">
-<span>Monthly HOA</span>
-<span id="hoaResult">$0</span>
-</div>
-
-<div class="result-row">
-<span>Monthly CDD</span>
-<span id="cddResult">$0</span>
-</div>
-
-<div class="result-row">
-<strong>Total Estimated Monthly Payment</strong>
-<strong id="totalPaymentResult">$0</strong>
-</div>
-
-</div>
-
-<div class="disclaimer">
-
-<strong>Disclaimer:</strong> This calculator is provided for educational and planning purposes only. Estimates are not guaranteed and may vary based on lender requirements, taxes, insurance, HOA fees, CDD assessments, property location, credit profile, and other factors. Consult your lender, title company, insurance provider, and tax professional for actual figures.
-
-</div>
+    <div class="result-row" style="margin-top:12px;"><span>Estimated Pre-Closing Out-of-Pocket Costs</span><strong id="preClosing">$0</strong></div>
+  </section>
 
 </div>
 
 <script>
-
-function formatCurrency(value){
-return value.toLocaleString('en-US',{
-style:'currency',
-currency:'USD'
-});
+function money(value) {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value || 0);
 }
 
-function calculate(){
+function calculate() {
+  const price = Number(document.getElementById('price').value) || 0;
+  const downPercent = Number(document.getElementById('downPercent').value) || 0;
+  const rate = Number(document.getElementById('rate').value) || 0;
+  const termYears = Number(document.getElementById('term').value) || 30;
+  const taxes = Number(document.getElementById('taxes').value) || 0;
+  const insurance = Number(document.getElementById('insurance').value) || 0;
+  const hoa = Number(document.getElementById('hoa').value) || 0;
+  const cdd = Number(document.getElementById('cdd').value) || 0;
+  const closingPercent = Number(document.getElementById('closingPercent').value) || 0;
+  const sellerCredit = Number(document.getElementById('sellerCredit').value) || 0;
+  const emd = Number(document.getElementById('emd').value) || 0;
+  const inspection = Number(document.getElementById('inspection').value) || 0;
+  const appraisal = Number(document.getElementById('appraisal').value) || 0;
+  const pmi = Number(document.getElementById('pmi').value) || 0;
 
-const price=parseFloat(document.getElementById('price').value)||0;
-const downPercent=parseFloat(document.getElementById('downPercent').value)||0;
-const interestRate=parseFloat(document.getElementById('interestRate').value)||0;
-const loanTerm=parseFloat(document.getElementById('loanTerm').value)||30;
-const taxes=parseFloat(document.getElementById('taxes').value)||0;
-const insurance=parseFloat(document.getElementById('insurance').value)||0;
-const hoa=parseFloat(document.getElementById('hoa').value)||0;
-const cdd=parseFloat(document.getElementById('cdd').value)||0;
-const closingPercent=parseFloat(document.getElementById('closingCosts').value)||0;
+  const downPayment = price * (downPercent / 100);
+  const loanAmount = Math.max(price - downPayment, 0);
+  const closingCosts = price * (closingPercent / 100);
 
-const downPayment=price*(downPercent/100);
-const loanAmount=price-downPayment;
-const closingCosts=price*(closingPercent/100);
-const cashNeeded=downPayment+closingCosts;
+  const monthlyRate = (rate / 100) / 12;
+  const numberPayments = termYears * 12;
+  let principalInterest = 0;
 
-const monthlyRate=(interestRate/100)/12;
-const totalPayments=loanTerm*12;
+  if (monthlyRate > 0 && loanAmount > 0) {
+    principalInterest = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numberPayments)) / (Math.pow(1 + monthlyRate, numberPayments) - 1);
+  } else {
+    principalInterest = loanAmount / numberPayments;
+  }
 
-let monthlyPI=0;
+  const monthlyTaxes = taxes / 12;
+  const monthlyInsurance = insurance / 12;
+  const monthlyCdd = cdd / 12;
+  const monthlyTotal = principalInterest + monthlyTaxes + monthlyInsurance + hoa + monthlyCdd + pmi;
 
-if(monthlyRate>0){
-monthlyPI=
-loanAmount*
-(monthlyRate*Math.pow(1+monthlyRate,totalPayments))/
-(Math.pow(1+monthlyRate,totalPayments)-1);
-}
+  const cashToClose = Math.max(downPayment + closingCosts - sellerCredit - emd, 0);
+  const preClosing = inspection + appraisal;
 
-const monthlyTaxes=taxes/12;
-const monthlyInsurance=insurance/12;
-const monthlyCDD=cdd/12;
+  document.getElementById('downPayment').textContent = money(downPayment);
+  document.getElementById('loanAmount').textContent = money(loanAmount);
+  document.getElementById('closingCosts').textContent = money(closingCosts);
+  document.getElementById('sellerCreditOut').textContent = "-" + money(sellerCredit);
+  document.getElementById('emdOut').textContent = "-" + money(emd);
+  document.getElementById('cashToClose').textContent = money(cashToClose);
 
-const totalPayment=
-monthlyPI+
-monthlyTaxes+
-monthlyInsurance+
-hoa+
-monthlyCDD;
-
-document.getElementById('downPaymentResult').innerHTML=formatCurrency(downPayment);
-document.getElementById('loanAmountResult').innerHTML=formatCurrency(loanAmount);
-document.getElementById('closingCostResult').innerHTML=formatCurrency(closingCosts);
-document.getElementById('cashNeededResult').innerHTML=formatCurrency(cashNeeded);
-document.getElementById('piResult').innerHTML=formatCurrency(monthlyPI);
-document.getElementById('taxResult').innerHTML=formatCurrency(monthlyTaxes);
-document.getElementById('insuranceResult').innerHTML=formatCurrency(monthlyInsurance);
-document.getElementById('hoaResult').innerHTML=formatCurrency(hoa);
-document.getElementById('cddResult').innerHTML=formatCurrency(monthlyCDD);
-document.getElementById('totalPaymentResult').innerHTML=formatCurrency(totalPayment);
-
-}
-
-function resetCalculator(){
-
-document.getElementById('price').value=400000;
-document.getElementById('downPercent').value=20;
-document.getElementById('interestRate').value=6.5;
-document.getElementById('loanTerm').value=30;
-document.getElementById('taxes').value=4000;
-document.getElementById('insurance').value=2500;
-document.getElementById('hoa').value=0;
-document.getElementById('cdd').value=0;
-document.getElementById('closingCosts').value=3;
-
-calculate();
-
+  document.getElementById('pi').textContent = money(principalInterest);
+  document.getElementById('monthlyTaxes').textContent = money(monthlyTaxes);
+  document.getElementById('monthlyInsurance').textContent = money(monthlyInsurance);
+  document.getElementById('monthlyHoa').textContent = money(hoa);
+  document.getElementById('monthlyCdd').textContent = money(monthlyCdd);
+  document.getElementById('monthlyPmi').textContent = money(pmi);
+  document.getElementById('monthlyTotal').textContent = money(monthlyTotal);
+  document.getElementById('preClosing').textContent = money(preClosing);
 }
 
 calculate();
-
 </script>
-
 </body>
 </html>
