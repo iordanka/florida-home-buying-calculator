@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Florida Home Buying Cost Calculator</title>
+
+<style>
+  :root {
+    --purple: #4b2e83;
+    --purple-dark: #321b5f;
+    --gold: #c9a227;
+    --light: #f7f5fb;
+    --border: #ddd7ea;
+    --text: #222222;
+  }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background: #ffffff;
+    color: var(--text);
+  }
+
+  .calculator-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 18px;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+    color: #ffffff;
+    padding: 28px;
+    border-radius: 18px;
+    margin-bottom: 22px;
+  }
+
+  .hero h1 {
+    margin: 0 0 10px;
+    font-size: 32px;
+    line-height: 1.15;
+  }
+
+  .hero p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 900px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(0,0,0,.04);
+  }
+
+  .card h2 {
+    color: var(--purple);
+    margin: 0 0 16px;
+    font-size: 22px;
+  }
+
+  label {
+    display: block;
+    font-weight: 700;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+
+  input,
+  select {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #cfc7df;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 15px;
+    background: #ffffff;
+  }
+
+  .hint {
+    font-size: 12px;
+    color: #666666;
+    margin-top: 4px;
+    line-height: 1.35;
+  }
+
+  .results {
+    background: var(--light);
+    border: 2px solid var(--purple);
+  }
+
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid #e6e0f1;
+    padding: 10px 0;
+    font-size: 15px;
+  }
+
+  .result-row:last-child {
+    border-bottom: none;
+  }
+
+  .result-row strong {
+    color: var(--purple-dark);
+    text-align: right;
+  }
+
+  .total {
+    background: #ffffff;
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 14px;
+  }
+
+  .total .result-row {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .btn {
+    display: inline-block;
+    background: var(--purple);
+    color: #ffffff !important;
+    border: none;
+    border-radius: 999px;
+    padding: 13px 22px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 14px;
+    text-decoration: none;
+  }
+
+  .btn:hover {
+    background: var(--purple-dark);
+  }
+
+  .lead-box {
+    margin-top: 22px;
+    padding: 24px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #ffffff, #f4effb);
+    border: 1px solid var(--border);
+  }
+
+  .lead-box h2 {
+    margin-top: 0;
+    color: var(--purple);
+  }
+
+  .lead-list {
+    columns: 2;
+    margin: 14px 0;
+    line-height: 1.7;
+  }
+
+  .disclaimer {
+    font-size: 12px;
+    color: #555555;
+    line-height: 1.45;
+    margin-top: 18px;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+  }
+
+  .contact {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 14px;
+  }
+
+  @media (max-width: 800px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+      font-size: 25px;
+    }
+
+    .lead-list {
+      columns: 1;
+    }
+  }
+</style>
+</head>
+
+<body>
+<div class="calculator-wrap">
+
+  <section class="hero">
+    <h1>Florida Home Buying Cost Calculator</h1>
+    <p>
+      Estimate your down payment, closing costs, prepaid expenses, monthly payment, and approximate cash needed to purchase a home in Florida. This tool is a helpful starting point and does not replace a lender estimate, title company quote, or closing disclosure.
+    </p>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Property & Loan Details</h2>
+
+      <label for="price">Purchase Price</label>
+      <input id="price" type="number" value="400000" min="0" />
+
+      <label for="downPercent">Down Payment %</label>
+      <input id="downPercent" type="number" value="5" step="0.1" min="0" />
+
+      <label for="rate">Interest Rate %</label>
+      <input id="rate" type="number" value="6.75" step="0.01" min="0" />
+
+      <label for="term">Loan Term</label>
+      <select id="term">
+        <option value="30" selected>30 Years</option>
+        <option value="20">20 Years</option>
+        <option value="15">15 Years</option>
+      </select>
+
+      <label for="taxes">Annual Property Taxes</label>
+      <input id="taxes" type="number" value="5000" min="0" />
+      <div class="hint">
+        Use the current or prior-year property tax amount when available. Actual taxes may change after purchase.
+      </div>
+
+      <label for="insurance">Annual Homeowners Insurance</label>
+      <input id="insurance" type="number" value="3000" min="0" />
+
+      <label for="hoa">Monthly HOA / Condo Fee</label>
+      <input id="hoa" type="number" value="0" min="0" />
+
+      <label for="cdd">Annual CDD Amount</label>
+      <input id="cdd" type="number" value="0" min="0" />
+      <div class="hint">
+        <strong>CDD disclaimer:</strong> In some communities, CDD assessments may already be included in the property tax bill. Do not add the CDD here if it is already included in the annual property tax amount, or it may be counted twice.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Closing & Prepaid Estimate</h2>
+
+      <label for="closingPercent">Estimated Closing Cost %</label>
+      <input id="closingPercent" type="number" value="3" step="0.1" min="0" />
+      <div class="hint">
+        A rough estimate only. Actual title, lender, county, HOA, prepaid, and escrow costs vary.
+      </div>
+
+      <label for="sellerCredit">Seller Credit / Concession</label>
+      <input id="sellerCredit" type="number" value="0" min="0" />
+
+      <label for="emd">Earnest Money Deposit Already Paid</label>
+      <input id="emd" type="number" value="0" min="0" />
+
+      <label for="inspection">Estimated Inspection Costs</label>
+      <input id="inspection" type="number" value="600" min="0" />
+
+      <label for="appraisal">Estimated Appraisal Fee</label>
+      <input id="appraisal" type="number" value="600" min="0" />
+
+      <label for="pmi">Monthly PMI / MIP Estimate</label>
+      <input id="pmi" type="number" value="0" min="0" />
+      <div class="hint">
+        Ask your lender for a more accurate PMI/MIP estimate based on loan type, credit, and down payment.
+      </div>
+
+      <button class="btn" onclick="calculate()">Update Estimate</button>
+    </section>
+  </div>
+
+  <section class="card results" style="margin-top:18px;">
+    <h2>Estimated Results</h2>
+
+    <div class="grid">
+      <div>
+        <div class="result-row"><span>Down Payment</span><strong id="downPayment">$0</strong></div>
+        <div class="result-row"><span>Estimated Loan Amount</span><strong id="loanAmount">$0</strong></div>
+        <div class="result-row"><span>Estimated Closing Costs</span><strong id="closingCosts">$0</strong></div>
+        <div class="result-row"><span>Less Seller Credit</span><strong id="sellerCreditOut">$0</strong></div>
+        <div class="result-row"><span>Less EMD Already Paid</span><strong id="emdOut">$0</strong></div>
+
+        <div class="total">
+          <div class="result-row">
+            <span>Estimated Cash Needed at Closing</span>
+            <strong id="cashToClose">$0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="result-row"><span>Principal & Interest</span><strong id="pi">$0</strong></div>
+        <div class="result-row"><span>Monthly Property Taxes</span><strong id="monthlyTaxes">$0</strong></div>
+        <div class="result-row"><span>Monthly Insurance</span><strong id="monthlyInsurance">$0</strong></div>
+        <div class="result-row"><span>Monthly HOA / Condo Fee</span><strong id="monthlyHoa">$0</strong></div>
+        <div class="result-row"><span>Monthly CDD</span><strong id="monthlyCdd">$0</strong></div>
+        <div class="result-row"><span>Monthly PMI / MIP</span><strong id="monthlyPmi">$0</strong></div>
+
+        <div class="total">
+          <div class="result-row">
+            <span>Estimated Monthly Payment</span>
+            <strong id="monthlyTotal">$0</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-row" style="margin-top:12px;">
+      <span>Estimated Pre-Closing Out-of-Pocket Costs</span>
+      <strong id="preClosing">$0</strong>
+    </div>
+  </section>
+
+  <section class="lead-box">
+    <h2>Need a Personalized Estimate?</h2>
+
+    <p>
+      This calculator provides an estimate only. Actual closing costs may vary based on lender fees, title company fees, property taxes, insurance premiums, HOA/CDD assessments, seller concessions, and loan program requirements.
+    </p>
+
+    <p>
+      For a customized estimate tailored to your specific purchase, financing, and property, contact:
+    </p>
+
+    <p>
+      <strong>Iordanka “Jordan” Karaivanova</strong><br>
+      Charles Rutenberg Realty<br>
+      REALTOR®, ABR®, AHWD, CIPS, C2EX, e-PRO, MRP, RSPS<br><br>
+      Cell / WhatsApp: +1 407-808-7716<br>
+      Email: info@iordanka.realtor<br>
+      Web: www.OrlandoHomes.RealEstate
+    </p>
+
+    <p class="lead-list">
+      ✔ First-Time Buyers<br>
+      ✔ Move-Up Buyers<br>
+      ✔ New Construction Purchases<br>
+      ✔ Vacation Homes<br>
+      ✔ International Buyers & Foreign Nationals
+    </p>
+
+    <a class="btn" href="https://www.orlandohomes.realestate/contact" target="_blank" rel="noopener">
+      Request a Personalized Estimate
+    </a>
+  </section>
+
+  <section class="disclaimer">
+    <strong>Important Disclaimer:</strong>
+    This calculator is for general informational and estimation purposes only. It is not a loan estimate, lender quote, title company quote, insurance quote, closing disclosure, tax advice, or financial advice. Actual costs may vary based on loan program, interest rate, credit profile, lender fees, title fees, county charges, insurance premiums, escrow requirements, property taxes, HOA/condo fees, CDD assessments, seller concessions, closing date, and contract terms. For exact figures, consult your lender, title company, insurance provider, tax advisor, and real estate professional.
+
+    <div class="contact">
+      <strong>Iordanka “Jordan” Karaivanova | Charles Rutenberg Realty</strong><br>
+      REALTOR®, ABR®, AHWD, CIPS, C2EX, e-PRO, MRP, RSPS<br>
+      631 S Orlando Ave, Suite 200, Winter Park, FL 32789<br>
+      Cell / WhatsApp: +1 407-808-7716 | Email: info@iordanka.realtor<br>
+      Web: www.OrlandoHomes.RealEstate
+    </div>
+  </section>
+
+</div>
+
+<script>
+function money(value) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0
+  }).format(value || 0);
+}
+
+function calculate() {
+  const price = Number(document.getElementById("price").value) || 0;
+  const downPercent = Number(document.getElementById("downPercent").value) || 0;
+  const rate = Number(document.getElementById("rate").value) || 0;
+  const termYears = Number(document.getElementById("term").value) || 30;
+  const taxes = Number(document.getElementById("taxes").value) || 0;
+  const insurance = Number(document.getElementById("insurance").value) || 0;
+  const hoa = Number(document.getElementById("hoa").value) || 0;
+  const cdd = Number(document.getElementById("cdd").value) || 0;
+  const closingPercent = Number(document.getElementById("closingPercent").value) || 0;
+  const sellerCredit = Number(document.getElementById("sellerCredit").value) || 0;
+  const emd = Number(document.getElementById("emd").value) || 0;
+  const inspection = Number(document.getElementById("inspection").value) || 0;
+  const appraisal = Number(document.getElementById("appraisal").value) || 0;
+  const pmi = Number(document.getElementById("pmi").value) || 0;
+
+  const downPayment = price * (downPercent / 100);
+  const loanAmount = Math.max(price - downPayment, 0);
+  const closingCosts = price * (closingPercent / 100);
+
+  const monthlyRate = (rate / 100) / 12;
+  const numberPayments = termYears * 12;
+  let principalInterest = 0;
+
+  if (monthlyRate > 0 && loanAmount > 0) {
+    principalInterest =
+      loanAmount *
+      (monthlyRate * Math.pow(1 + monthlyRate, numberPayments)) /
+      (Math.pow(1 + monthlyRate, numberPayments) - 1);
+  } else if (loanAmount > 0) {
+    principalInterest = loanAmount / numberPayments;
+  }
+
+  const monthlyTaxes = taxes / 12;
+  const monthlyInsurance = insurance / 12;
+  const monthlyCdd = cdd / 12;
+  const monthlyTotal =
+    principalInterest + monthlyTaxes + monthlyInsurance + hoa + monthlyCdd + pmi;
+
+  const cashToClose = Math.max(downPayment + closingCosts - sellerCredit - emd, 0);
+  const preClosing = inspection + appraisal;
+
+  document.getElementById("downPayment").textContent = money(downPayment);
+  document.getElementById("loanAmount").textContent = money(loanAmount);
+  document.getElementById("closingCosts").textContent = money(closingCosts);
+  document.getElementById("sellerCreditOut").textContent = "-" + money(sellerCredit);
+  document.getElementById("emdOut").textContent = "-" + money(emd);
+  document.getElementById("cashToClose").textContent = money(cashToClose);
+
+  document.getElementById("pi").textContent = money(principalInterest);
+  document.getElementById("monthlyTaxes").textContent = money(monthlyTaxes);
+  document.getElementById("monthlyInsurance").textContent = money(monthlyInsurance);
+  document.getElementById("monthlyHoa").textContent = money(hoa);
+  document.getElementById("monthlyCdd").textContent = money(monthlyCdd);
+  document.getElementById("monthlyPmi").textContent = money(pmi);
+  document.getElementById("monthlyTotal").textContent = money(monthlyTotal);
+  document.getElementById("preClosing").textContent = money(preClosing);
+}
+
+calculate();
+</script>
+
+</body>
+</html>
